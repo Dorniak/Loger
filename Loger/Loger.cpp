@@ -8,7 +8,6 @@ Constructor of the class. Create the file in the given path + time now + class t
 @param clas The name of the class we are logging.
 */
 Loger::Loger(String^ path, String^ clas) {
-
 	if (!File::Exists(path))
 	{
 		try
@@ -26,7 +25,6 @@ Loger::Loger(String^ path, String^ clas) {
 		{
 			Console::WriteLine(e->ToString());
 		}
-
 	}
 }
 
@@ -35,14 +33,13 @@ Destructor of the class.
 
 */
 Loger::~Loger() {
-
 	if (fs)
 		fs->Close();
 	delete (IDisposable^)fs;
 }
 
 /**
-Logging fuction that actually write data to the file.
+Logging function that actually write data to the file.
 
 @param data The data we want to we written.
 */
@@ -50,13 +47,17 @@ void Loger::log(String ^ data)
 {
 	try
 	{
-		fs->WriteLine("[" + DateTime::Now.ToString("HH:mm:ss") + "]" + data);
+		fs->WriteLine("[" + DateTime::Now.ToString("HH:mm:ss") + "]  " + data);
+		fs->Flush();
 	}
 	catch (Exception^ e)
 	{
-		Console::WriteLine(e->ToString());
+		Console::WriteLine(e->GetBaseException()->ToString());
 	}
-
-	fs->Flush();
 }
 
+void Loger::close()
+{
+	fs->Flush();
+	fs->Close();
+}
